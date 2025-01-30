@@ -2,5 +2,5 @@ import { setupStravaData } from './alpine/strava'
 import Alpine from 'alpinejs'
 
 
-Alpine.data('dropdown', setupStravaData)
+Alpine.data('stravaData', setupStravaData)
 Alpine.start()
