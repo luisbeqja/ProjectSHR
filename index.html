@@ -13,7 +13,7 @@
     <div
       id="app"
       x-data="dropdown()"
-      x-init="console.log('Alpine component initialized')"
+      x-init="initStravaApp()"
     >
       <h1>Project Strava🦿</h1>
       <p class="read-the-docs">Upload any run to Strava with a single click</p>
@@ -24,7 +24,7 @@
           accept=".gpx"
           @change="handleFileChange($event)"
         />
-        <button @click="getAuthorizationUrlTokenCode()">Get Authorization URL</button>
+        <button x-show="!tokenCode" @click="getAuthorizationUrlTokenCode()">Get Authorization URL</button>
         <button
           id="uploadButton"
           :disabled="isUploadDisabled"
@@ -40,7 +40,7 @@
           Check Upload Status
         </button>
       </div>
-      <p id="status" x-text="status"></p>
+      <p id="status" x-html="status"></p>
     </div>
   </body>
 </html>

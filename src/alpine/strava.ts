@@ -2,6 +2,7 @@ import '../style.css'
 import { uploadActivityGpx, getUploadActivity } from '../api/activities'
 import { exchangeToken, getAuthorizationUrl } from '../api/utils'
 
+const REFRESH_TOKEN = import.meta.env.VITE_STRAVA_REFRESH_TOKEN;
 // Define the return type for better type checking
 interface StravaState {
     currentUploadId: string | null;
@@ -13,6 +14,7 @@ interface StravaState {
     handleUpload: () => Promise<void>;
     checkStatus: () => Promise<void>;
     getAuthorizationUrlTokenCode: () => Promise<void>;
+    initStravaApp: () => Promise<void>;
 }
 
 export function setupStravaData(): StravaState {
@@ -42,14 +44,11 @@ export function setupStravaData(): StravaState {
                     throw new Error('Please select a GPX file')
                 }
 
-                const urlParams = new URLSearchParams(window.location.search)
-                const tokens = await exchangeToken(urlParams.get('code') || this.tokenCode)
-
-                if (!tokens) {
+                if (!this.tokenCode) {
                     throw new Error('Not authenticated. Please log in first.')
                 }
 
-                const result = await uploadActivityGpx(tokens.access_token, file)
+                const result = await uploadActivityGpx(this.tokenCode, file)
 
                 if (result.id) {
                     this.currentUploadId = result.id
@@ -81,10 +80,7 @@ export function setupStravaData(): StravaState {
                 this.isCheckDisabled = true
                 this.status = 'Checking upload status...'
 
-                const urlParams = new URLSearchParams(window.location.search)
-                const tokens = await exchangeToken(urlParams.get('code') || this.tokenCode)
-
-                const activity = await getUploadActivity(tokens.access_token, this.currentUploadId)
+                const activity = await getUploadActivity(this.tokenCode, this.currentUploadId)
 
                 if (activity.error) {
                     this.status = `Upload error: ${activity.error}`
@@ -103,11 +99,24 @@ export function setupStravaData(): StravaState {
                 this.isCheckDisabled = false
             }
         },
-        // handle token code change
+
         async getAuthorizationUrlTokenCode() {
             const authUrl = await getAuthorizationUrl()
             console.log('Please visit this URL to authorize:', authUrl)
             window.open(authUrl, '_blank')
+        },
+
+        async initStravaApp() {
+            const urlParams = new URLSearchParams(window.location.search)
+            const tokenCode = urlParams.get('code')
+            if (tokenCode) {
+                const tokens = await exchangeToken(tokenCode)
+                localStorage.setItem('strava_access_token', tokens.access_token)
+                this.tokenCode = tokens.access_token
+            } else if (localStorage.getItem('strava_access_token')) {
+                console.log('Access token found in localStorage')
+                this.tokenCode = localStorage.getItem('strava_access_token') || ''
+            }
         }
     }
 } 
