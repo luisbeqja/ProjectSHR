@@ -25,3 +25,8 @@ export async function exchangeToken(code: string) {
     });
     return await response.json();
 }
+
+// Get the access token from localStorage
+export function getAccessToken(): string | null {
+    return localStorage.getItem('strava_access_token');
+}

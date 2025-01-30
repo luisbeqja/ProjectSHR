@@ -94,3 +94,52 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem auto;
+  max-width: 400px;
+  padding: 1rem;
+}
+
+#uploadButton,
+#checkStatusButton {
+  background-color: #FC4C02;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+#uploadButton:hover:not(:disabled),
+#checkStatusButton:hover:not(:disabled) {
+  background-color: #E34402;
+}
+
+#uploadButton:disabled,
+#checkStatusButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#status {
+  margin-top: 1rem;
+  text-align: center;
+  color: #666;
+}
+
+#gpxFile {
+  padding: 1rem;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#gpxFile:hover {
+  border-color: #FC4C02;
+}
