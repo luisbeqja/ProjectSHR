@@ -1,13 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Project Strava🦿</title>
+
+    <!-- load our code -->
+    <script defer type="module" src="/src/main.ts"></script>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div
+      id="app"
+      x-data="dropdown()"
+      x-init="console.log('Alpine component initialized')"
+    >
+      <h1>Project Strava🦿</h1>
+      <p class="read-the-docs">Upload any run to Strava with a single click</p>
+      <div class="upload-container">
+        <input
+          type="file"
+          id="gpxFile"
+          accept=".gpx"
+          @change="handleFileChange($event)"
+        />
+        <button @click="getAuthorizationUrlTokenCode()">Get Authorization URL</button>
+        <button
+          id="uploadButton"
+          :disabled="isUploadDisabled"
+          @click="handleUpload()"
+        >
+          Upload GPX to Strava
+        </button>
+        <button
+          id="checkStatusButton"
+          :disabled="isCheckDisabled"
+          @click="checkStatus()"
+        >
+          Check Upload Status
+        </button>
+      </div>
+      <p id="status" x-text="status"></p>
+    </div>
   </body>
 </html>
