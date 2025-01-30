@@ -63,6 +63,10 @@ h1 {
   color: #888;
 }
 
+p {
+  margin: 0;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -119,6 +123,10 @@ button:focus-visible {
 #uploadButton:hover:not(:disabled),
 #checkStatusButton:hover:not(:disabled) {
   background-color: #E34402;
+}
+
+.main-text {
+  color: #FC4C02;
 }
 
 #uploadButton:disabled,
